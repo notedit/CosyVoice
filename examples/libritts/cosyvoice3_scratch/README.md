@@ -46,12 +46,14 @@ Only `train_conf` + batching changed; the **model architecture section is identi
 
 ```bash
 # edit pretrained_model_dir / system_prompt / train_sets / dev_sets at the top of run.sh first
-bash run.sh                 # default: stage 3 (pack parquet) -> 5 (train) -> 6 (average)
+bash run.sh                 # default: stage 3 (pack) -> 4 (validate) -> 5 (train) -> 6 (average)
 ```
 
 - **Stage 3** (re)generates `data/<set>/instruct` from `text` and packs parquet (with the `instruct` column).
+- **Stage 4** validates the packed parquet (`validate_parquet.py`) and **aborts before training** if anything is wrong — see [Helper scripts](#helper-scripts).
 - **Stage 5** trains the LM from scratch on 8 GPUs (`--model llm`, **no** `--checkpoint`).
 - **Stage 6** averages the best-by-cv checkpoints into `exp/cosyvoice3_scratch/llm/<engine>/llm.pt`.
+- **Stage 7** (opt-in, `stop_stage=7`) runs the LM-only sanity check (`sanity_check_lm.py`).
 
 Smoke-test first: point `train_sets` at a ~100–500 h subset, run a few hundred steps, confirm
 `loss` drops and `acc` rises (TensorBoard), then scale to the full corpus.
@@ -65,7 +67,8 @@ Smoke-test first: point `train_sets` at a ~100–500 h subset, run a few hundred
    import pandas as pd; print(pd.read_parquet('data/<set>/parquet/xxx.parquet').columns.tolist())
    # expect 'instruct', 'text', 'speech_token', and 'utt_embedding'/'spk_embedding'
    ```
-   If missing, re-run stage 3 — no need to re-extract features.
+   If missing, re-run stage 3 — no need to re-extract features. Stage 4 (`validate_parquet.py`)
+   checks this automatically and fails the run before any GPU time is spent.
 2. **Speech tokenizer must be v3** (vocab/embedding size is locked to 6761). Do **not** load a CV2 `llm.pt`.
 3. **Tokenizer version must be `cosyvoice3`** (already set in the yaml).
 4. **`--onnx_path`** points at the released dir: because the env var gets set, `online_feature`
@@ -89,5 +92,38 @@ for i, out in enumerate(m.inference_zero_shot(
     torchaudio.save(f'out_{i}.wav', out['tts_speech'], m.sample_rate)
 ```
 
-For a faster LM-only sanity check, instantiate `CosyVoice3LM` from the yaml, `load_state_dict(llm.pt)`,
-and call `.inference(...)` — confirm it emits speech tokens and stops at `eos`.
+## Helper scripts
+
+Two standalone scripts (no changes to the training code) make the pipeline safer and give a
+fast feedback loop:
+
+### `validate_parquet.py` — pre-flight parquet check (stage 4)
+
+Validates packed shards before you burn GPU time. Exits non-zero (aborting `run.sh`) if any of:
+the `instruct` column is missing/empty or lacks `<|endofprompt|>`; `speech_token` ids fall outside
+`[0, 6561)` or a row is empty; `utt_embedding`/`spk_embedding` dimension ≠ 192.
+
+```bash
+python validate_parquet.py --data_list data/train.data.list --num_parquet 20   # sample 20 shards
+python validate_parquet.py --dir data/train/parquet --num_parquet 0            # check all shards
+python validate_parquet.py --parquet data/train/parquet/parquet_000000000.tar  # one shard
+# --no_require_instruct to skip the CV3 instruct checks (e.g. CV2-style data)
+```
+
+### `sanity_check_lm.py` — LM-only generation check (stage 7)
+
+Loads **only** the LM (flow/hift overridden to `None`, no onnx needed) and runs one autoregressive
+decode to confirm the model emits speech tokens in `[0, 6561)` and stops at a stop token. Seconds,
+not minutes — works on any mid-training `epoch_*_step_*.pt` as well as the averaged `llm.pt`.
+
+```bash
+python sanity_check_lm.py \
+    --config conf/cosyvoice3.yaml \
+    --qwen_pretrain_path ../../../pretrained_models/Fun-CosyVoice3-0.5B/CosyVoice-BlankEN \
+    --llm_pt exp/cosyvoice3_scratch/llm/torch_ddp/llm.pt \
+    --prompt_text "You are a helpful assistant.<|endofprompt|>" \
+    --text "今天天气真不错，我们出去走走吧。"
+```
+
+A `PASS` means the LM is wired up and generating/terminating correctly; for audio quality use the
+end-to-end check above.

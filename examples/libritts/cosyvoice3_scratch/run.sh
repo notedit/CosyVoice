@@ -57,6 +57,19 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
   done
 fi
 
+# ---------- Stage 4: validate packed parquet BEFORE training (gate) ----------
+# Catches the #1 from-scratch crash (missing/empty instruct) plus speech_token
+# range / embedding-dim issues, so a bad pack fails here in seconds instead of
+# minutes into the multi-GPU job. run.sh has no `set -e`, so we gate with `|| exit 1`.
+if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
+  echo "Stage 4: validate parquet (instruct present + speech_token in [0,6561) + embedding dim 192)"
+  cat $(for x in $train_sets; do echo data/$x/parquet/data.list; done) > data/train.data.list
+  cat $(for x in $dev_sets;   do echo data/$x/parquet/data.list; done) > data/dev.data.list
+  # samples the first 20 shards of each list (issues are systemic); use --num_parquet 0 for all.
+  python validate_parquet.py --data_list data/train.data.list --num_parquet 20 || exit 1
+  python validate_parquet.py --data_list data/dev.data.list   --num_parquet 20 || exit 1
+fi
+
 # ---------- Stage 5: train the LM from scratch ----------
 export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
 num_gpus=$(echo $CUDA_VISIBLE_DEVICES | awk -F "," '{print NF}')
@@ -107,4 +120,19 @@ if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ]; then
     --src_path `pwd`/exp/cosyvoice3_scratch/llm/$train_engine \
     --num ${average_num} \
     --val_best
+fi
+
+# ---------- Stage 7 (optional): LM-only sanity check ----------
+# NOT run by default (stop_stage=6). Bump stop_stage to 7, or just call the script
+# directly. Needs no onnx and no vocoder -> finishes in seconds. It loads only the
+# llm, runs one autoregressive decode and checks the model emits speech tokens in
+# [0,6561) and stops at a stop token. Works on any mid-training epoch_*_step_*.pt too.
+if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
+  echo "Stage 7: LM-only sanity check (autoregressive token generation + stop)"
+  python sanity_check_lm.py \
+    --config conf/cosyvoice3.yaml \
+    --qwen_pretrain_path $pretrained_model_dir/CosyVoice-BlankEN \
+    --llm_pt `pwd`/exp/cosyvoice3_scratch/llm/$train_engine/llm.pt \
+    --prompt_text "$system_prompt" \
+    --text "今天天气真不错，我们出去走走吧。" || exit 1
 fi
