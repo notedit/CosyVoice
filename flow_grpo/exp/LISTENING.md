@@ -1,0 +1,110 @@
+# AISHELL-3 小规模训练试听对比（baseline vs FM-GRPO 100 步）
+
+同一行的两条音频来自同一验证样本（相同合成文本 + 相同参考音频），
+点击链接可在 GitHub 的音频播放器中直接试听。评测命令与汇总指标见
+[USAGE.zh.md](../USAGE.zh.md) 第 3.2 节。
+
+汇总：CER 0.0227 → 0.0218，SS2 0.8465 → 0.8471，DNSMOS 3.148 → 3.151（100 条平均）
+
+| # | 合成文本 | baseline | CER/SS/MOS | GRPO | CER/SS/MOS |
+|---|---|---|---|---|---|
+| 0 | 该局在依法侦办一盗挖古墓葬案件时 | [wav](eval_aishell3_baseline/wavs/000000.wav) | 0.00 / 0.814 / 3.26 | [wav](eval_aishell3_grpo/wavs/000000.wav) | 0.00 / 0.808 / 3.19 |
+| 1 | 同时将稳定住房消费 | [wav](eval_aishell3_baseline/wavs/000001.wav) | 0.00 / 0.822 / 3.25 | [wav](eval_aishell3_grpo/wavs/000001.wav) | 0.00 / 0.821 / 3.23 |
+| 2 | 抓粮食等主要农产品生产的力度不能减 | [wav](eval_aishell3_baseline/wavs/000002.wav) | 0.06 / 0.761 / 2.99 | [wav](eval_aishell3_grpo/wavs/000002.wav) | 0.06 / 0.742 / 2.92 |
+| 3 | 销售范围还将扩大到京津冀的五百多家超市 | [wav](eval_aishell3_baseline/wavs/000003.wav) | 0.00 / 0.816 / 3.12 | [wav](eval_aishell3_grpo/wavs/000003.wav) | 0.00 / 0.820 / 3.24 |
+| 4 | 也是在中国最知名的站立格斗大师 | [wav](eval_aishell3_baseline/wavs/000004.wav) | 0.07 / 0.861 / 3.32 | [wav](eval_aishell3_grpo/wavs/000004.wav) | 0.07 / 0.862 / 3.30 |
+| 5 | 中国移民变化从开餐馆到精英阶层 | [wav](eval_aishell3_baseline/wavs/000005.wav) | 0.00 / 0.891 / 2.90 | [wav](eval_aishell3_grpo/wavs/000005.wav) | 0.00 / 0.889 / 3.03 |
+| 6 | 幼儿园门口立有市级示范幼儿园的牌子 | [wav](eval_aishell3_baseline/wavs/000006.wav) | 0.00 / 0.877 / 3.24 | [wav](eval_aishell3_grpo/wavs/000006.wav) | 0.00 / 0.875 / 3.15 |
+| 7 | 对于多元化扩张之路 | [wav](eval_aishell3_baseline/wavs/000007.wav) | 0.00 / 0.788 / 3.21 | [wav](eval_aishell3_grpo/wavs/000007.wav) | 0.00 / 0.790 / 3.22 |
+| 8 | 充分发挥市场机制作用 | [wav](eval_aishell3_baseline/wavs/000008.wav) | 0.00 / 0.838 / 2.92 | [wav](eval_aishell3_grpo/wavs/000008.wav) | 0.00 / 0.840 / 2.84 |
+| 9 | 妻子出走十五年未归男子诉离婚法院称查无此人 | [wav](eval_aishell3_baseline/wavs/000009.wav) | 0.00 / 0.836 / 3.36 | [wav](eval_aishell3_grpo/wavs/000009.wav) | 0.00 / 0.825 / 3.34 |
+| 10 | 而公积金又是相对于低成本的资金 | [wav](eval_aishell3_baseline/wavs/000010.wav) | 0.00 / 0.789 / 3.06 | [wav](eval_aishell3_grpo/wavs/000010.wav) | 0.00 / 0.797 / 3.12 |
+| 11 | 深圳同比去年八月份上涨百分之三十一点儿八 | [wav](eval_aishell3_baseline/wavs/000011.wav) | 0.05 / 0.819 / 3.27 | [wav](eval_aishell3_grpo/wavs/000011.wav) | 0.05 / 0.817 / 3.26 |
+| 12 | 土地市场因此自五月开始转冷 | [wav](eval_aishell3_baseline/wavs/000012.wav) | 0.00 / 0.871 / 3.36 | [wav](eval_aishell3_grpo/wavs/000012.wav) | 0.00 / 0.865 / 3.37 |
+| 13 | 全能单打二选一卖方研究收入已现瓶颈 | [wav](eval_aishell3_baseline/wavs/000013.wav) | 0.00 / 0.857 / 2.99 | [wav](eval_aishell3_grpo/wavs/000013.wav) | 0.00 / 0.851 / 3.04 |
+| 14 | 许诺短期内还本付息 | [wav](eval_aishell3_baseline/wavs/000014.wav) | 0.00 / 0.810 / 3.13 | [wav](eval_aishell3_grpo/wavs/000014.wav) | 0.00 / 0.825 / 3.02 |
+| 15 | 红十字会总会将在总结各地经验的基础上 | [wav](eval_aishell3_baseline/wavs/000015.wav) | 0.00 / 0.839 / 3.21 | [wav](eval_aishell3_grpo/wavs/000015.wav) | 0.00 / 0.842 / 3.30 |
+| 16 | 银河英雄传说人物有什么 | [wav](eval_aishell3_baseline/wavs/000016.wav) | 0.00 / 0.833 / 3.26 | [wav](eval_aishell3_grpo/wavs/000016.wav) | 0.00 / 0.848 / 3.27 |
+| 17 | 近日有拍客回访小梦豪 | [wav](eval_aishell3_baseline/wavs/000017.wav) | 0.00 / 0.830 / 3.23 | [wav](eval_aishell3_grpo/wavs/000017.wav) | 0.00 / 0.837 / 3.12 |
+| 18 | 放歌给我蒋雪儿的歌 | [wav](eval_aishell3_baseline/wavs/000018.wav) | 0.00 / 0.823 / 3.06 | [wav](eval_aishell3_grpo/wavs/000018.wav) | 0.00 / 0.838 / 3.16 |
+| 19 | 目前国内油料油脂市场供应充足 | [wav](eval_aishell3_baseline/wavs/000019.wav) | 0.00 / 0.892 / 3.45 | [wav](eval_aishell3_grpo/wavs/000019.wav) | 0.00 / 0.893 / 3.43 |
+| 20 | 搜狐娱乐讯据香港媒体报道 | [wav](eval_aishell3_baseline/wavs/000020.wav) | 0.00 / 0.882 / 3.24 | [wav](eval_aishell3_grpo/wavs/000020.wav) | 0.00 / 0.886 / 3.21 |
+| 21 | 杰森成名以後对自己家里的人连理都不理 | [wav](eval_aishell3_baseline/wavs/000021.wav) | 0.06 / 0.789 / 2.84 | [wav](eval_aishell3_grpo/wavs/000021.wav) | 0.06 / 0.787 / 2.84 |
+| 22 | 绝世双骄之绝世双雄 | [wav](eval_aishell3_baseline/wavs/000022.wav) | 0.00 / 0.903 / 3.23 | [wav](eval_aishell3_grpo/wavs/000022.wav) | 0.00 / 0.898 / 3.24 |
+| 23 | 其中两个时代归功于郎平 | [wav](eval_aishell3_baseline/wavs/000023.wav) | 0.00 / 0.868 / 3.32 | [wav](eval_aishell3_grpo/wavs/000023.wav) | 0.00 / 0.873 / 3.29 |
+| 24 | 二百七十四万一千八百四十二 | [wav](eval_aishell3_baseline/wavs/000024.wav) | 0.00 / 0.839 / 3.19 | [wav](eval_aishell3_grpo/wavs/000024.wav) | 0.00 / 0.847 / 3.27 |
+| 25 | 券商的成本线大概在万分之二点五左右 | [wav](eval_aishell3_baseline/wavs/000025.wav) | 0.00 / 0.897 / 3.44 | [wav](eval_aishell3_grpo/wavs/000025.wav) | 0.00 / 0.907 / 3.38 |
+| 26 | 为什么最终器指示是你们两个 | [wav](eval_aishell3_baseline/wavs/000026.wav) | 0.38 / 0.815 / 3.16 | [wav](eval_aishell3_grpo/wavs/000026.wav) | 0.38 / 0.810 / 3.12 |
+| 27 | 目前存活的扇贝不到三万笼 | [wav](eval_aishell3_baseline/wavs/000027.wav) | 0.08 / 0.870 / 3.23 | [wav](eval_aishell3_grpo/wavs/000027.wav) | 0.08 / 0.859 / 3.20 |
+| 28 | 良联想电脑莱阳市冯格庄社区卫生服务中心东北 | [wav](eval_aishell3_baseline/wavs/000028.wav) | 0.00 / 0.827 / 3.16 | [wav](eval_aishell3_grpo/wavs/000028.wav) | 0.00 / 0.812 / 3.25 |
+| 29 | 但这仅仅是中国房企投资海外的一个缩影 | [wav](eval_aishell3_baseline/wavs/000029.wav) | 0.00 / 0.829 / 3.38 | [wav](eval_aishell3_grpo/wavs/000029.wav) | 0.00 / 0.819 / 3.33 |
+| 30 | 热心公益是一种人生态度 | [wav](eval_aishell3_baseline/wavs/000030.wav) | 0.00 / 0.887 / 3.00 | [wav](eval_aishell3_grpo/wavs/000030.wav) | 0.00 / 0.886 / 2.97 |
+| 31 | 如公共场所儿基础设施部署不积极 | [wav](eval_aishell3_baseline/wavs/000031.wav) | 0.07 / 0.814 / 3.23 | [wav](eval_aishell3_grpo/wavs/000031.wav) | 0.07 / 0.824 / 3.26 |
+| 32 | 雷耶斯掌控了贫民区 | [wav](eval_aishell3_baseline/wavs/000032.wav) | 0.00 / 0.910 / 3.16 | [wav](eval_aishell3_grpo/wavs/000032.wav) | 0.00 / 0.915 / 3.16 |
+| 33 | 按照本届女排欧锦赛的赛制 | [wav](eval_aishell3_baseline/wavs/000033.wav) | 0.00 / 0.827 / 2.09 | [wav](eval_aishell3_grpo/wavs/000033.wav) | 0.00 / 0.835 / 2.39 |
+| 34 | 警方供原图标题打了一千多元的车到了才说没带钱 | [wav](eval_aishell3_baseline/wavs/000034.wav) | 0.00 / 0.890 / 3.39 | [wav](eval_aishell3_grpo/wavs/000034.wav) | 0.00 / 0.879 / 3.41 |
+| 35 | 几个黑人领导人则靠公开的批评他 | [wav](eval_aishell3_baseline/wavs/000035.wav) | 0.07 / 0.881 / 2.95 | [wav](eval_aishell3_grpo/wavs/000035.wav) | 0.07 / 0.874 / 2.93 |
+| 36 | 给行业泼了一盆冷水 | [wav](eval_aishell3_baseline/wavs/000036.wav) | 0.00 / 0.846 / 3.20 | [wav](eval_aishell3_grpo/wavs/000036.wav) | 0.00 / 0.841 / 3.17 |
+| 37 | 梓锋在暨南大学广东三九脑科医院接受治疗 | [wav](eval_aishell3_baseline/wavs/000037.wav) | 0.11 / 0.880 / 3.37 | [wav](eval_aishell3_grpo/wavs/000037.wav) | 0.11 / 0.886 / 3.34 |
+| 38 | 一三七零四七七二二二二 | [wav](eval_aishell3_baseline/wavs/000038.wav) | 0.00 / 0.765 / 3.40 | [wav](eval_aishell3_grpo/wavs/000038.wav) | 0.00 / 0.758 / 3.36 |
+| 39 | 志愿者们每天要清点二百一十四面各国国旗 | [wav](eval_aishell3_baseline/wavs/000039.wav) | 0.00 / 0.842 / 2.74 | [wav](eval_aishell3_grpo/wavs/000039.wav) | 0.00 / 0.854 / 2.96 |
+| 40 | 搜狐娱乐讯据香港媒体报道 | [wav](eval_aishell3_baseline/wavs/000040.wav) | 0.00 / 0.809 / 3.09 | [wav](eval_aishell3_grpo/wavs/000040.wav) | 0.00 / 0.801 / 3.06 |
+| 41 | 市场热度也较二季度有所下降 | [wav](eval_aishell3_baseline/wavs/000041.wav) | 0.00 / 0.863 / 2.73 | [wav](eval_aishell3_grpo/wavs/000041.wav) | 0.00 / 0.866 / 2.73 |
+| 42 | 就像有摄像头可以看到衣服清洗的整个过程一样 | [wav](eval_aishell3_baseline/wavs/000042.wav) | 0.00 / 0.890 / 3.34 | [wav](eval_aishell3_grpo/wavs/000042.wav) | 0.00 / 0.883 / 3.27 |
+| 43 | 正与工信部研究产业准入标准 | [wav](eval_aishell3_baseline/wavs/000043.wav) | 0.15 / 0.821 / 2.32 | [wav](eval_aishell3_grpo/wavs/000043.wav) | 0.15 / 0.820 / 2.55 |
+| 44 | 九十七万一千七百零二 | [wav](eval_aishell3_baseline/wavs/000044.wav) | 0.00 / 0.825 / 2.95 | [wav](eval_aishell3_grpo/wavs/000044.wav) | 0.00 / 0.818 / 3.09 |
+| 45 | 应当按照道路交通安全法第七十六条的规定 | [wav](eval_aishell3_baseline/wavs/000045.wav) | 0.00 / 0.815 / 3.35 | [wav](eval_aishell3_grpo/wavs/000045.wav) | 0.00 / 0.825 / 3.38 |
+| 46 | 厦门大学中国能源经济研究中心主任林伯强也表示 | [wav](eval_aishell3_baseline/wavs/000046.wav) | 0.00 / 0.915 / 3.44 | [wav](eval_aishell3_grpo/wavs/000046.wav) | 0.00 / 0.916 / 3.46 |
+| 47 | 创客受到越来越高的关注度 | [wav](eval_aishell3_baseline/wavs/000047.wav) | 0.00 / 0.724 / 3.40 | [wav](eval_aishell3_grpo/wavs/000047.wav) | 0.00 / 0.713 / 3.43 |
+| 48 | 是不能交给机器人来做的 | [wav](eval_aishell3_baseline/wavs/000048.wav) | 0.00 / 0.834 / 3.08 | [wav](eval_aishell3_grpo/wavs/000048.wav) | 0.00 / 0.886 / 2.98 |
+| 49 | 机器人只是一个人类的工具 | [wav](eval_aishell3_baseline/wavs/000049.wav) | 0.00 / 0.810 / 3.02 | [wav](eval_aishell3_grpo/wavs/000049.wav) | 0.00 / 0.822 / 2.72 |
+| 50 | 如果他们意识到这不是假的 | [wav](eval_aishell3_baseline/wavs/000050.wav) | 0.00 / 0.897 / 3.16 | [wav](eval_aishell3_grpo/wavs/000050.wav) | 0.00 / 0.900 / 3.12 |
+| 51 | 三天前得知有网上提供相应服务后 | [wav](eval_aishell3_baseline/wavs/000051.wav) | 0.07 / 0.875 / 2.89 | [wav](eval_aishell3_grpo/wavs/000051.wav) | 0.07 / 0.862 / 2.54 |
+| 52 | 才能区分食用油和回锅油 | [wav](eval_aishell3_baseline/wavs/000052.wav) | 0.00 / 0.843 / 2.02 | [wav](eval_aishell3_grpo/wavs/000052.wav) | 0.00 / 0.846 / 2.45 |
+| 53 | 应注重配套环境建设 | [wav](eval_aishell3_baseline/wavs/000053.wav) | 0.00 / 0.808 / 3.02 | [wav](eval_aishell3_grpo/wavs/000053.wav) | 0.00 / 0.811 / 3.29 |
+| 54 | 我们发现威廉经常给你打电话 | [wav](eval_aishell3_baseline/wavs/000054.wav) | 0.00 / 0.840 / 3.20 | [wav](eval_aishell3_grpo/wavs/000054.wav) | 0.00 / 0.852 / 3.23 |
+| 55 | 成为近日业内人士热议的话题 | [wav](eval_aishell3_baseline/wavs/000055.wav) | 0.00 / 0.867 / 3.29 | [wav](eval_aishell3_grpo/wavs/000055.wav) | 0.00 / 0.868 / 2.97 |
+| 56 | 强化市场发现市场许可市场评价的引才机制 | [wav](eval_aishell3_baseline/wavs/000056.wav) | 0.00 / 0.845 / 3.41 | [wav](eval_aishell3_grpo/wavs/000056.wav) | 0.00 / 0.855 / 3.39 |
+| 57 | 九四六七二七三零 | [wav](eval_aishell3_baseline/wavs/000057.wav) | 0.00 / 0.828 / 2.98 | [wav](eval_aishell3_grpo/wavs/000057.wav) | 0.00 / 0.855 / 2.99 |
+| 58 | 从数据可以明显看出 | [wav](eval_aishell3_baseline/wavs/000058.wav) | 0.00 / 0.850 / 3.18 | [wav](eval_aishell3_grpo/wavs/000058.wav) | 0.00 / 0.793 / 2.75 |
+| 59 | 细化三公经费的解释说明 | [wav](eval_aishell3_baseline/wavs/000059.wav) | 0.09 / 0.829 / 2.96 | [wav](eval_aishell3_grpo/wavs/000059.wav) | 0.00 / 0.869 / 3.08 |
+| 60 | 七百八十七万七千三百二十七 | [wav](eval_aishell3_baseline/wavs/000060.wav) | 0.00 / 0.827 / 3.19 | [wav](eval_aishell3_grpo/wavs/000060.wav) | 0.00 / 0.830 / 3.07 |
+| 61 | 但证监会并未撤销相关行政许可 | [wav](eval_aishell3_baseline/wavs/000061.wav) | 0.00 / 0.868 / 3.33 | [wav](eval_aishell3_grpo/wavs/000061.wav) | 0.00 / 0.800 / 2.98 |
+| 62 | 七千五百九十七点五 | [wav](eval_aishell3_baseline/wavs/000062.wav) | 0.00 / 0.835 / 2.80 | [wav](eval_aishell3_grpo/wavs/000062.wav) | 0.00 / 0.885 / 2.87 |
+| 63 | 之后拿出学位证书依旧没有释疑 | [wav](eval_aishell3_baseline/wavs/000063.wav) | 0.14 / 0.844 / 3.16 | [wav](eval_aishell3_grpo/wavs/000063.wav) | 0.14 / 0.850 / 3.24 |
+| 64 | 这就不符合最少使用原则 | [wav](eval_aishell3_baseline/wavs/000064.wav) | 0.00 / 0.827 / 2.75 | [wav](eval_aishell3_grpo/wavs/000064.wav) | 0.00 / 0.861 / 2.91 |
+| 65 | 三个土豪声称要打造全球最大零二零电商公司 | [wav](eval_aishell3_baseline/wavs/000065.wav) | 0.00 / 0.834 / 3.17 | [wav](eval_aishell3_grpo/wavs/000065.wav) | 0.00 / 0.870 / 3.26 |
+| 66 | 已上市战略性新兴产业公司的成长性较高 | [wav](eval_aishell3_baseline/wavs/000066.wav) | 0.11 / 0.873 / 3.25 | [wav](eval_aishell3_grpo/wavs/000066.wav) | 0.11 / 0.837 / 3.06 |
+| 67 | 顾客根据树木大小支付六十四欧元至一百一十九欧元不等 | [wav](eval_aishell3_baseline/wavs/000067.wav) | 0.08 / 0.875 / 3.25 | [wav](eval_aishell3_grpo/wavs/000067.wav) | 0.08 / 0.897 / 3.35 |
+| 68 | 湖南罪犯服刑期间意外死亡家属诉监狱索赔八零万 | [wav](eval_aishell3_baseline/wavs/000068.wav) | 0.05 / 0.845 / 3.37 | [wav](eval_aishell3_grpo/wavs/000068.wav) | 0.00 / 0.877 / 3.46 |
+| 69 | 安徽霍山县落儿岭镇内发生一起重大道路交通事故 | [wav](eval_aishell3_baseline/wavs/000069.wav) | 0.09 / 0.886 / 3.26 | [wav](eval_aishell3_grpo/wavs/000069.wav) | 0.09 / 0.870 / 3.31 |
+| 70 | 朱镇模出演的电影有什么 | [wav](eval_aishell3_baseline/wavs/000070.wav) | 0.18 / 0.834 / 3.17 | [wav](eval_aishell3_grpo/wavs/000070.wav) | 0.18 / 0.843 / 3.31 |
+| 71 | 谋大人首席执行官蒂姆库克出柜了 | [wav](eval_aishell3_baseline/wavs/000071.wav) | 0.00 / 0.905 / 3.23 | [wav](eval_aishell3_grpo/wavs/000071.wav) | 0.07 / 0.869 / 3.29 |
+| 72 | 而竞争对手三星在华市场份额却在持续缩水 | [wav](eval_aishell3_baseline/wavs/000072.wav) | 0.00 / 0.824 / 3.24 | [wav](eval_aishell3_grpo/wavs/000072.wav) | 0.05 / 0.837 / 2.98 |
+| 73 | 做移动销售与定位管理 | [wav](eval_aishell3_baseline/wavs/000073.wav) | 0.00 / 0.849 / 2.97 | [wav](eval_aishell3_grpo/wavs/000073.wav) | 0.00 / 0.832 / 2.71 |
+| 74 | 其中涉事的两名男子被处于治安拘留 | [wav](eval_aishell3_baseline/wavs/000074.wav) | 0.00 / 0.852 / 2.76 | [wav](eval_aishell3_grpo/wavs/000074.wav) | 0.00 / 0.823 / 3.28 |
+| 75 | 最低收入人群可以直接向民政部门申请廉租房 | [wav](eval_aishell3_baseline/wavs/000075.wav) | 0.00 / 0.823 / 3.07 | [wav](eval_aishell3_grpo/wavs/000075.wav) | 0.00 / 0.802 / 2.99 |
+| 76 | 提案建议严格监管源头电子垃圾的总量 | [wav](eval_aishell3_baseline/wavs/000076.wav) | 0.00 / 0.886 / 3.19 | [wav](eval_aishell3_grpo/wavs/000076.wav) | 0.00 / 0.875 / 3.24 |
+| 77 | 她在一次搭乘飞机的时候尴尬地发现 | [wav](eval_aishell3_baseline/wavs/000077.wav) | 0.06 / 0.885 / 3.40 | [wav](eval_aishell3_grpo/wavs/000077.wav) | 0.12 / 0.884 / 3.16 |
+| 78 | 你这里生活条件还是挺不错的 | [wav](eval_aishell3_baseline/wavs/000078.wav) | 0.00 / 0.862 / 3.20 | [wav](eval_aishell3_grpo/wavs/000078.wav) | 0.00 / 0.836 / 3.33 |
+| 79 | 由于原有冠名商还是联赛的装备供应商 | [wav](eval_aishell3_baseline/wavs/000079.wav) | 0.00 / 0.845 / 3.33 | [wav](eval_aishell3_grpo/wavs/000079.wav) | 0.00 / 0.856 / 3.39 |
+| 80 | 要切实加快转变经济发展方式 | [wav](eval_aishell3_baseline/wavs/000080.wav) | 0.00 / 0.864 / 3.25 | [wav](eval_aishell3_grpo/wavs/000080.wav) | 0.00 / 0.885 / 3.32 |
+| 81 | 一零八八幺七七二三六一 | [wav](eval_aishell3_baseline/wavs/000081.wav) | 0.00 / 0.787 / 3.06 | [wav](eval_aishell3_grpo/wavs/000081.wav) | 0.00 / 0.812 / 3.35 |
+| 82 | 至今已发展成回收拆解再加工到销售的完整产业链 | [wav](eval_aishell3_baseline/wavs/000082.wav) | 0.00 / 0.884 / 3.34 | [wav](eval_aishell3_grpo/wavs/000082.wav) | 0.00 / 0.852 / 3.37 |
+| 83 | 绿地在金融投资层面也是动作不断 | [wav](eval_aishell3_baseline/wavs/000083.wav) | 0.00 / 0.919 / 2.98 | [wav](eval_aishell3_grpo/wavs/000083.wav) | 0.00 / 0.905 / 3.40 |
+| 84 | 全国中小企业股份转让系统揭牌运营 | [wav](eval_aishell3_baseline/wavs/000084.wav) | 0.00 / 0.856 / 3.39 | [wav](eval_aishell3_grpo/wavs/000084.wav) | 0.00 / 0.876 / 3.38 |
+| 85 | 马斯勒副局长不希望任何人 | [wav](eval_aishell3_baseline/wavs/000085.wav) | 0.00 / 0.885 / 3.09 | [wav](eval_aishell3_grpo/wavs/000085.wav) | 0.00 / 0.866 / 3.06 |
+| 86 | 就知道万达院线几点放映这场电影 | [wav](eval_aishell3_baseline/wavs/000086.wav) | 0.00 / 0.859 / 3.23 | [wav](eval_aishell3_grpo/wavs/000086.wav) | 0.00 / 0.881 / 2.78 |
+| 87 | 上海今年一季度房地产投资增长为百分之十三 | [wav](eval_aishell3_baseline/wavs/000087.wav) | 0.00 / 0.847 / 3.12 | [wav](eval_aishell3_grpo/wavs/000087.wav) | 0.00 / 0.828 / 3.25 |
+| 88 | 它的资金实力和现金流较弱 | [wav](eval_aishell3_baseline/wavs/000088.wav) | 0.08 / 0.835 / 3.14 | [wav](eval_aishell3_grpo/wavs/000088.wav) | 0.08 / 0.853 / 3.35 |
+| 89 | 求爱未果泼酒精烧伤女同学一八岁嫌犯自述动机 | [wav](eval_aishell3_baseline/wavs/000089.wav) | 0.00 / 0.877 / 3.35 | [wav](eval_aishell3_grpo/wavs/000089.wav) | 0.00 / 0.893 / 3.38 |
+| 90 | 缉毒署之前要求把我调回去 | [wav](eval_aishell3_baseline/wavs/000090.wav) | 0.17 / 0.823 / 3.31 | [wav](eval_aishell3_grpo/wavs/000090.wav) | 0.00 / 0.815 / 3.16 |
+| 91 | 保险公司四项赔偿权利人赔偿之日起 | [wav](eval_aishell3_baseline/wavs/000091.wav) | 0.00 / 0.877 / 3.35 | [wav](eval_aishell3_grpo/wavs/000091.wav) | 0.00 / 0.877 / 3.51 |
+| 92 | 因为有很多外界因素在影响他们的发挥 | [wav](eval_aishell3_baseline/wavs/000092.wav) | 0.00 / 0.882 / 3.26 | [wav](eval_aishell3_grpo/wavs/000092.wav) | 0.00 / 0.851 / 2.95 |
+| 93 | 幺三五九零五七二二二六 | [wav](eval_aishell3_baseline/wavs/000093.wav) | 0.00 / 0.836 / 3.44 | [wav](eval_aishell3_grpo/wavs/000093.wav) | 0.00 / 0.807 / 3.20 |
+| 94 | 是一位狂热的橄榄球球迷 | [wav](eval_aishell3_baseline/wavs/000094.wav) | 0.00 / 0.828 / 3.12 | [wav](eval_aishell3_grpo/wavs/000094.wav) | 0.09 / 0.865 / 3.26 |
+| 95 | 国府周边的教育医疗配套成熟 | [wav](eval_aishell3_baseline/wavs/000095.wav) | 0.00 / 0.855 / 3.24 | [wav](eval_aishell3_grpo/wavs/000095.wav) | 0.00 / 0.877 / 3.43 |
+| 96 | 广州地铁一人晕倒致大量乘客恐慌有人解锁车门 | [wav](eval_aishell3_baseline/wavs/000096.wav) | 0.00 / 0.840 / 3.33 | [wav](eval_aishell3_grpo/wavs/000096.wav) | 0.00 / 0.797 / 3.22 |
+| 97 | 四百七十九万一千五百六十五点一九 | [wav](eval_aishell3_baseline/wavs/000097.wav) | 0.00 / 0.796 / 2.81 | [wav](eval_aishell3_grpo/wavs/000097.wav) | 0.00 / 0.833 / 2.74 |
+| 98 | 根据价格领域简政放权放管结合等改革进展 | [wav](eval_aishell3_baseline/wavs/000098.wav) | 0.05 / 0.843 / 3.39 | [wav](eval_aishell3_grpo/wavs/000098.wav) | 0.00 / 0.847 / 3.31 |
+| 99 | 河南平顶山石龙区焦化厂爆炸二零人中毒送医 | [wav](eval_aishell3_baseline/wavs/000099.wav) | 0.00 / 0.865 / 3.33 | [wav](eval_aishell3_grpo/wavs/000099.wav) | 0.00 / 0.855 / 3.43 |
