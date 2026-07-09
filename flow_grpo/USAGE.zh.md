@@ -101,6 +101,37 @@ python fetch_cv3_eval.py --split zero_shot_zh --num_samples 32
 # 生成 data/raw.jsonl + data/prompt_wavs/*.wav
 ```
 
+小规模训练用 AISHELL-3（voxbox 版，metadata 带时长/转写，音频 19GB 单包）：
+
+```bash
+wget -O data/aishell-3.jsonl \
+  https://huggingface.co/datasets/SparkAudio/voxbox/resolve/main/metadata/aishell-3.jsonl
+python -c "from huggingface_hub import hf_hub_download; hf_hub_download(
+  repo_id='SparkAudio/voxbox', repo_type='dataset',
+  filename='audios/aishell-3/aishell-3_0000.tar.gz', local_dir='data/voxbox')"
+mkdir -p data/aishell3_wavs
+tar -xzf data/voxbox/audios/aishell-3/aishell-3_0000.tar.gz -C data/aishell3_wavs
+
+python prepare_aishell3.py --metadata data/aishell-3.jsonl --wav_dir data/aishell3_wavs \
+    --output data/aishell3_raw.jsonl --num_samples 4000
+python prepare_data.py --input data/aishell3_raw.jsonl \
+    --output data/aishell3_train.jsonl --val_output data/aishell3_val.jsonl --val_size 100
+python make_hard_cases.py --input data/aishell3_train.jsonl \
+    --output data/aishell3_hard.jsonl --num_samples 1300
+cat data/aishell3_train.jsonl data/aishell3_hard.jsonl | shuf > data/aishell3_train_all.jsonl
+```
+
+配套的单卡小规模配置是 `conf/grpo_small.yaml`（组大小 8、4 prompts×2 更新/迭代、
+共 100 步 =50 迭代，lr 1e-4 线性衰减）；在共享 H200 上实测约 3 分钟/迭代，
+全程 2.5–3 小时：
+
+```bash
+CUDA_VISIBLE_DEVICES=7 PYTHONPATH=..:../third_party/Matcha-TTS \
+python train_grpo.py --config conf/grpo_small.yaml \
+    --model_dir ../pretrained_models/Fun-CosyVoice3-0.5B \
+    --train_data data/aishell3_train_all.jsonl --output_dir exp/fm_grpo_aishell3
+```
+
 ### 3.3 过滤、切分与难例增强
 
 ```bash
