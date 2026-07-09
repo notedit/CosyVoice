@@ -1,0 +1,44 @@
+# FlowTTS-GRPO config for CosyVoice3 (arXiv:2606.23190).
+# Values marked [paper] come from the paper; values marked [default] are not
+# specified there and are reasonable defaults - tune as needed.
+
+fp16_llm: true            # frozen LLM can run in half precision for rollouts
+
+sampling:
+  n_timesteps: 10         # [paper] CosyVoice3 uses 10 Euler steps, train == inference
+  noise_level: 0.5        # [paper] a in sigma_t = a * sqrt((1-t)/t); ablation optimum
+  window_size: 2          # [paper] ws: number of SDE steps optimized per trajectory
+  window_start_min: 1     # [paper] S_min lower bound (never 0: sigma diverges at t=0)
+  window_start_max: 3     # [paper] S_min upper bound
+  logprob_reduction: mean # [default] per-element mean (Flow-GRPO convention); 'sum' = paper Eq.11 literal
+
+grpo:
+  group_size: 8           # [paper] G samples per prompt
+  prompts_per_iter: 8     # per GPU; paper reports 512 samples per iteration total
+                          # (8 GPUs x 8 prompts x 8 samples = 512)
+  updates_per_iter: 8     # [paper] parameter updates per iteration
+  clip_eps: 0.2           # [default] PPO clip range (paper does not specify)
+  kl_beta: 0.001          # [default] KL weight beta (paper does not specify; 0 disables)
+  lr: 1.0e-4              # [paper] linear decay to 0 at total_steps
+  total_steps: 10000      # [paper] 10k optimizer steps
+  grad_clip: 1.0          # [default]
+  std_eps: 1.0e-6         # groups with reward std below this are dropped [paper]
+
+lora:
+  rank: 32                # [paper]
+  alpha: 64               # [paper]
+  dropout: 0.0            # [default] keep the policy density deterministic
+
+rewards:
+  device: same            # 'same' = training GPU, or e.g. 'cuda:7' for a dedicated one
+  weights:                # [paper] lambda_ss / lambda_asr / lambda_mos
+    ss: 1.0
+    asr: 1.0
+    mos: 0.4
+  speaker_model: iic/speech_eres2net_sv_zh-cn_16k-common   # [default] paper: ERes2Net, version unpinned
+  zh_asr_model: paraformer-zh                              # [paper] Paraformer for Chinese CER
+  en_asr_model: openai/whisper-large-v3                    # [paper] Whisper-large-v3 for English WER
+  dnsmos_onnx: models/sig_bak_ovr.onnx                     # [paper] DNSMOS P.835, OVRL score
+
+logging:
+  save_every: 50          # iterations between checkpoints
