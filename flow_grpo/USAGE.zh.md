@@ -132,6 +132,21 @@ python train_grpo.py --config conf/grpo_small.yaml \
     --train_data data/aishell3_train_all.jsonl --output_dir exp/fm_grpo_aishell3
 ```
 
+一次实际运行的参考结果（2026-07，单张 H200，3897 常规 + 1300 难例 prompt，
+50 迭代/100 步，验证集为同源 held-out 100 条，`evaluate.py` 打分）：
+
+| 指标 | baseline | + FM-GRPO (100 步) |
+|---|---|---|
+| CER (Paraformer) | 2.27% | 2.18% |
+| SS2 (ERes2Net) | 0.8465 | 0.8471 |
+| DNSMOS P.835 OVRL | 3.148 | 3.151 |
+
+三项指标方向都对但都在噪声范围内——这符合预期：100 步只有论文 10k 步的
+1%，此规模验证的是"训练无退化、流程可跑通"。要看到论文量级的提升
+（SS2 +0.029、DNSMOS +0.18）需要用 `conf/grpo.yaml` 的完整步数和更大的
+prompt 池（WenetSpeech4TTS Premium）。训练全程 KL 稳定在 1e-4 量级、
+clip_frac=0、无丢弃组，rollout 失败率为 0。
+
 ### 3.3 过滤、切分与难例增强
 
 ```bash
