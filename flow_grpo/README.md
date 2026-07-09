@@ -4,6 +4,8 @@ Reproduction of **FlowTTS-GRPO: Online Reinforcement Learning with Multi-Objecti
 Reward Optimization for Flow-Matching Based Text-to-Speech**
 ([arXiv:2606.23190](https://arxiv.org/abs/2606.23190), Tongyi Lab) on CosyVoice3.
 
+> 中文的分步使用说明（环境安装、数据准备、训练、评测）见 **[USAGE.zh.md](USAGE.zh.md)**。
+
 The paper fine-tunes **only the flow-matching (FM) module** of CosyVoice 3.0 with
 online GRPO — the LLM, speech tokenizer and vocoder stay frozen — and reports on
 Seed-TTS-Eval-zh: speaker similarity SS1 0.777 → **0.804** (surpassing closed-source
