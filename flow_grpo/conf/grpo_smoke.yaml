@@ -1,0 +1,43 @@
+# Small-scale GPU bring-up config: same algorithm as grpo.yaml, sizes shrunk
+# so one GPU finishes a few full GRPO iterations in minutes. Not for real
+# training - use conf/grpo.yaml for that.
+
+fp16_llm: true
+
+sampling:
+  n_timesteps: 10
+  noise_level: 0.5
+  window_size: 2
+  window_start_min: 1
+  window_start_max: 3
+  logprob_reduction: mean
+
+grpo:
+  group_size: 4           # paper: 8
+  prompts_per_iter: 2     # paper: 8 per GPU
+  updates_per_iter: 2     # paper: 8
+  clip_eps: 0.2
+  kl_beta: 0.001
+  lr: 1.0e-4
+  total_steps: 4          # 2 iterations x 2 updates; paper: 10000
+  grad_clip: 1.0
+  std_eps: 1.0e-6
+
+lora:
+  rank: 32
+  alpha: 64
+  dropout: 0.0
+
+rewards:
+  device: same
+  weights:
+    ss: 1.0
+    asr: 1.0
+    mos: 0.4
+  speaker_model: iic/speech_eres2net_sv_zh-cn_16k-common
+  zh_asr_model: paraformer-zh
+  en_asr_model: openai/whisper-large-v3
+  dnsmos_onnx: models/sig_bak_ovr.onnx
+
+logging:
+  save_every: 1

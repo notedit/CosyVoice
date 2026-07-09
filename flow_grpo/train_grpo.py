@@ -17,7 +17,7 @@ Only the DiT estimator's LoRA adapters are trained; LLM / speech tokenizer /
 vocoder stay frozen. Single GPU:
 
     python train_grpo.py --config conf/grpo.yaml --train_data data/train.jsonl \
-        --model_dir ../../../pretrained_models/Fun-CosyVoice3-0.5B --output_dir exp/fm_grpo
+        --model_dir ../pretrained_models/Fun-CosyVoice3-0.5B --output_dir exp/fm_grpo
 
 Multi GPU (each rank rolls out its own prompts, LoRA grads are all-reduced):
 
@@ -37,7 +37,7 @@ import torch.distributed as dist
 import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../..')
+ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 sys.path.insert(0, ROOT_DIR)
 sys.path.insert(0, os.path.join(ROOT_DIR, 'third_party/Matcha-TTS'))
 

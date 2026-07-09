@@ -39,7 +39,7 @@ import torchaudio
 import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../..')
+ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 sys.path.insert(0, ROOT_DIR)
 sys.path.insert(0, os.path.join(ROOT_DIR, 'third_party/Matcha-TTS'))
 

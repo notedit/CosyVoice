@@ -9,7 +9,7 @@ online GRPO — the LLM, speech tokenizer and vocoder stay frozen — and report
 Seed-TTS-Eval-zh: speaker similarity SS1 0.777 → **0.804** (surpassing closed-source
 Seed-TTS), DNSMOS P.835 3.353 → **3.536**, with CER essentially unchanged.
 
-This recipe is complementary to [`examples/grpo/cosyvoice2`](../cosyvoice2), which
+This recipe is complementary to [`examples/grpo/cosyvoice2`](../examples/grpo/cosyvoice2), which
 applies GRPO to the **LLM** (improving CER). The paper's ablations show the two
 levels decouple: LM-level RL fixes intelligibility, FM-level RL improves timbre
 similarity and perceptual quality, and their gains stack.

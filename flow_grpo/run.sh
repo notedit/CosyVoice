@@ -10,15 +10,15 @@ log() {
   echo -e "$(date '+%Y-%m-%d %H:%M:%S') (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $*"
 }
 
-export PYTHONPATH=../../..:../../../third_party/Matcha-TTS:$PYTHONPATH
+export PYTHONPATH=..:../third_party/Matcha-TTS:$PYTHONPATH
 
-model_dir=../../../pretrained_models/Fun-CosyVoice3-0.5B
+model_dir=../pretrained_models/Fun-CosyVoice3-0.5B
 exp_dir=exp/fm_grpo
 num_gpus=8
 
 if [ $stage -le -1 ] && [ $stop_stage -ge -1 ]; then
   log "stage -1: download Fun-CosyVoice3-0.5B and the DNSMOS onnx model"
-  python3 -c "from modelscope import snapshot_download; snapshot_download('FunAudioLLM/Fun-CosyVoice3-0.5B', local_dir='$model_dir')"
+  python3 -c "from modelscope import snapshot_download; snapshot_download('FunAudioLLM/Fun-CosyVoice3-0.5B-2512', local_dir='$model_dir')"
   mkdir -p models
   wget -O models/sig_bak_ovr.onnx \
     https://github.com/microsoft/DNS-Challenge/raw/master/DNSMOS/DNSMOS/sig_bak_ovr.onnx
