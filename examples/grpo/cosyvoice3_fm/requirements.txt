@@ -1,0 +1,7 @@
+# On top of the base CosyVoice requirements (repo root requirements.txt).
+funasr>=1.1.4          # Paraformer ASR reward
+modelscope>=1.15.0     # ERes2Net speaker verification + model download
+onnxruntime-gpu>=1.16.0; sys_platform == 'linux'   # DNSMOS (use onnxruntime on CPU-only machines)
+transformers>=4.40.1   # Whisper-large-v3 ASR reward
+jieba>=0.42.1          # Chinese word segmentation for hard-case synthesis
+pytest>=7.0.0          # unit tests
