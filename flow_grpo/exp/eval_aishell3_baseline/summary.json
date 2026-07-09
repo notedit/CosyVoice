@@ -1,0 +1,8 @@
+{
+  "num_items": 100,
+  "cer_zh": 0.02266294523330127,
+  "wer_en": null,
+  "ss_eres2net": 0.8465052503347397,
+  "dnsmos_p835_ovrl": 3.147626948246146,
+  "flow_ckpt": "baseline"
+}
