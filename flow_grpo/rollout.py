@@ -39,6 +39,18 @@ from flow_grpo.policy import FlowGRPOPolicy
 SILENT_TOKENS = [1, 2, 28, 29, 55, 248, 494, 2241, 2242, 2322, 2323]
 MAX_SILENT_TOKENS = 5
 REWARD_SAMPLE_RATE = 16000
+# CosyVoice3's LLM asserts <|endofprompt|> is present in prompt_text+text
+# (cosyvoice/llm/llm.py); official zero-shot usage carries it in this prefix.
+CV3_INSTRUCT_PREFIX = 'You are a helpful assistant.<|endofprompt|>'
+
+
+def ensure_instruct_prefix(text: str, prompt_text: str) -> str:
+    """Returns prompt_text with the CosyVoice3 instruct prefix added if neither
+    field already contains <|endofprompt|>, so plain Seed-TTS-Eval style jsonl
+    works unmodified."""
+    if '<|endofprompt|>' in text or '<|endofprompt|>' in prompt_text:
+        return prompt_text
+    return CV3_INSTRUCT_PREFIX + prompt_text
 
 
 def load_cosyvoice3(model_dir: str, device: torch.device, fp16_llm: bool = False):
@@ -91,6 +103,7 @@ class TTSRollout:
     @torch.no_grad()
     def generate_tokens(self, text: str, prompt_text: str, prompt_wav: str) -> Optional[Dict]:
         """Runs frontend + frozen LLM once; returns model inputs + generated tokens."""
+        prompt_text = ensure_instruct_prefix(text, prompt_text)
         text = self.frontend.text_normalize(text, split=False)
         prompt_text = self.frontend.text_normalize(prompt_text, split=False)
         model_input = self.frontend.frontend_zero_shot(text, prompt_text, prompt_wav, self.sample_rate, '')

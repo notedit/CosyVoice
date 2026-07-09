@@ -80,6 +80,12 @@ bash run.sh -1 -1
 tokenizer 拒绝）；`text` 是让模型合成的内容，可以和音频无关。GRPO 是在线 RL，
 不需要目标音频。
 
+> 注意：CosyVoice3 的 LLM 要求输入中含有 `<|endofprompt|>` 标记（官方用法是
+> `"You are a helpful assistant.<|endofprompt|>" + prompt_text`）。`rollout.py`
+> 和 `evaluate.py` 检测到两个字段都没有该标记时会**自动补上这个前缀**，所以
+> 普通 Seed-TTS-Eval 风格的纯文本 jsonl 可以直接用；如果你的数据自带
+> instruct 前缀（如方言/情感指令），保留即可，不会重复添加。
+
 ### 3.2 数据来源
 
 | 场景 | 数据 | 说明 |

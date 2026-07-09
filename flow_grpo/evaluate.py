@@ -49,6 +49,7 @@ from cosyvoice.utils.file_utils import load_wav  # noqa: E402
 from rewards.asr import ASRReward, contains_chinese, error_rate  # noqa: E402
 from rewards.dnsmos import DNSMOSReward  # noqa: E402
 from rewards.speaker_sim import SpeakerSimilarityReward  # noqa: E402
+from rollout import ensure_instruct_prefix  # noqa: E402
 
 
 def get_args():
@@ -74,8 +75,9 @@ def synthesize(args, items, wav_dir):
         out_path = os.path.join(wav_dir, f'{idx:06d}.wav')
         if os.path.exists(out_path):
             continue
+        prompt_text = ensure_instruct_prefix(item['text'], item['prompt_text'])
         chunks = [out['tts_speech'] for out in cosyvoice.inference_zero_shot(
-            item['text'], item['prompt_text'], item['prompt_wav'], stream=False)]
+            item['text'], prompt_text, item['prompt_wav'], stream=False)]
         torchaudio.save(out_path, torch.concat(chunks, dim=1), cosyvoice.sample_rate)
         if (idx + 1) % 50 == 0:
             logging.info(f'synthesized {idx + 1}/{len(items)}')
