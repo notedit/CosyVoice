@@ -62,6 +62,22 @@ def get_args():
     return parser.parse_args()
 
 
+def pin_rank_gpu():
+    """Restricts each torchrun rank to its own GPU via CUDA_VISIBLE_DEVICES
+    before any CUDA context exists. Libraries that hardcode device 0 - the
+    frontend's speech-tokenizer onnx session, DNSMOS onnx - would otherwise
+    all pile onto physical GPU 0 and serialize the whole multi-GPU run."""
+    local_rank = os.environ.get('LOCAL_RANK')
+    if local_rank is None:
+        return
+    visible = os.environ.get('CUDA_VISIBLE_DEVICES')
+    if visible:
+        os.environ['CUDA_VISIBLE_DEVICES'] = visible.split(',')[int(local_rank)]
+    else:
+        os.environ['CUDA_VISIBLE_DEVICES'] = local_rank
+    os.environ['LOCAL_RANK'] = '0'  # the rank's GPU is now cuda:0
+
+
 def init_distributed():
     if int(os.environ.get('WORLD_SIZE', 1)) > 1:
         dist.init_process_group(backend='nccl')
@@ -102,6 +118,7 @@ def compute_group_rewards(group, rollout_engine, reward_fns, weights, composer):
 def main():
     args = get_args()
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+    pin_rank_gpu()
     rank, world_size, device = init_distributed()
     random.seed(args.seed + rank)
     torch.manual_seed(args.seed + rank)
