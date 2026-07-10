@@ -1,0 +1,8 @@
+{
+  "num_items": 100,
+  "cer_zh": 0.021553457498813534,
+  "wer_en": null,
+  "ss_eres2net": 0.8092657542228698,
+  "dnsmos_p835_ovrl": 3.151202088912962,
+  "flow_ckpt": "exp/fm_grpo_8gpu/flow_step5600.pt"
+}
