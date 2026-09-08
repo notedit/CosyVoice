@@ -725,6 +725,26 @@ class CausalHiFTGenerator(HiFTGenerator):
             generated_speech = self.decode(x=speech_feat[:, :, :-self.f0_predictor.condnet[0].causal_padding], s=s, finalize=finalize)
         return generated_speech, s
 
+    def fold_weight_norm(self):
+        """Bake weight_norm into plain weights (inference only; state_dict keys change).
+        Saves one weight recomputation per conv per forward call."""
+        from torch.nn.utils import parametrize
+        for m in self.modules():
+            if parametrize.is_parametrized(m, 'weight'):
+                parametrize.remove_parametrizations(m, 'weight', leave_parametrized=True)
+
+    # incremental chunk-level inference, see cosyvoice/hifigan/streaming.py
+    def new_stream_state(self):
+        from cosyvoice.hifigan.streaming import HiFTStreamState
+        return HiFTStreamState()
+
+    def inference_chunk(self, speech_feat: torch.Tensor, state, finalize: bool = False,
+                        finalize_pad_multiple: Optional[int] = None) -> torch.Tensor:
+        """Feed new mel frames (B, 80, T_new); returns the newly completed waveform (B, S_new).
+        Unlike `inference(finalize=False)` this does not recompute the prefix."""
+        from cosyvoice.hifigan.streaming import inference_chunk
+        return inference_chunk(self, speech_feat, state, finalize, finalize_pad_multiple)
+
 
 if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True

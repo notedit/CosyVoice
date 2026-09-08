@@ -394,18 +394,37 @@ class CosyVoice2Model(CosyVoiceModel):
             torch.cuda.current_stream().synchronize()
 
 
+HIFT_MODES = ('legacy', 'incremental')
+
+
 class CosyVoice3Model(CosyVoice2Model):
 
     def __init__(self,
                  llm: torch.nn.Module,
                  flow: torch.nn.Module,
                  hift: torch.nn.Module,
-                 fp16: bool = False):
+                 fp16: bool = False,
+                 hift_mode: str = 'incremental'):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.llm = llm
         self.flow = flow
         self.hift = hift
         self.fp16 = fp16
+        # One switch for rolling the new vocoder out (see cosyvoice/hifigan/streaming.py):
+        #   legacy       the vocoder exactly as it was: the streaming path re-runs the whole
+        #                mel prefix per chunk, weight norm stays live, so every waveform -
+        #                streaming and non-streaming - is bit-identical to the old code
+        #   incremental  per-chunk inference with carried state, weight norm folded (default)
+        # COSYVOICE_HIFT_MODE overrides the argument, so a canary replica can be flipped
+        # without a code change; a mid-rollout switch back to legacy needs no other cleanup.
+        hift_mode = os.environ.get('COSYVOICE_HIFT_MODE', hift_mode)
+        assert hift_mode in HIFT_MODES, 'hift_mode must be one of {}, got {}'.format(HIFT_MODES, hift_mode)
+        self.hift_mode = hift_mode
+        self.use_hift_cache = hift_mode != 'legacy' and hasattr(hift, 'inference_chunk')
+        self.hift_finalize_pad = 50
+        # folding weight norm into the weights saves a weight recomputation per conv per call
+        # (~2 ms per streaming chunk) but changes the rounding, so legacy keeps it live
+        self.fold_hift_weight_norm = self.use_hift_cache
         # NOTE must matching training static_chunk_size
         self.token_hop_len = 25
         # NOTE increase token_hop_len incrementally to avoid duplicate inference
@@ -422,6 +441,11 @@ class CosyVoice3Model(CosyVoice2Model):
         # FSQ silent and breath token
         self.silent_tokens = [1, 2, 28, 29, 55, 248, 494, 2241, 2242, 2322, 2323]
 
+    def load(self, llm_model, flow_model, hift_model):
+        super().load(llm_model, flow_model, hift_model)
+        if self.fold_hift_weight_norm and hasattr(self.hift, 'fold_weight_norm'):
+            self.hift.fold_weight_norm()
+
     def token2wav(self, token, prompt_token, prompt_feat, embedding, token_offset, uuid, stream=False, finalize=False, speed=1.0):
         with torch.cuda.amp.autocast(self.fp16):
             tts_mel, _ = self.flow.inference(token=token.to(self.device, dtype=torch.int32),
@@ -434,6 +458,12 @@ class CosyVoice3Model(CosyVoice2Model):
                                              streaming=stream,
                                              finalize=finalize)
             tts_mel = tts_mel[:, :, token_offset * self.flow.token_mel_ratio:]
+            if self.use_hift_cache and (stream or self.hift_cache_dict[uuid] is not None):
+                assert speed == 1.0, 'speed change only support non-stream inference mode'
+                if self.hift_cache_dict[uuid] is None:
+                    self.hift_cache_dict[uuid] = self.hift.new_stream_state()
+                return self.hift.inference_chunk(tts_mel, self.hift_cache_dict[uuid], finalize=finalize,
+                                                 finalize_pad_multiple=self.hift_finalize_pad)
             # append mel cache
             if self.hift_cache_dict[uuid] is not None:
                 hift_cache_mel = self.hift_cache_dict[uuid]['mel']
